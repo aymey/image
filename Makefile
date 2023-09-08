@@ -4,7 +4,7 @@ TARGET = image
 
 all: image
 
-image: $(TARGET).c bitmap.c
+image: *.c *.h
 	$(CC) $(CFLAGS) $(TARGET).c bitmap.c -o $(TARGET)
 
 .PHONY: all image

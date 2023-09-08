@@ -1,5 +1,15 @@
 #include "bitmap.h"
 
 bool validate_BMP(uint16_t signature) {
-    return signature == BM ? true : false;
+    switch(signature) {
+        case BM:
+        case BA:
+        case CI:
+        case CP:
+        case IC:
+        case PT:
+            return true;
+        default:
+            return false;
+    }
 }

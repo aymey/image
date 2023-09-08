@@ -24,14 +24,13 @@ int main(int argc, char *argv[]) {
         fclose(img);
         return 1;
     }
-
-    BMP data;
-    fread(&data, sizeof(BMP), 1, img);
+    BITMAPINFOHEADER data;
+    fread(&data, sizeof(BITMAPINFOHEADER), 1, img);
     // fread(&data.width, sizeof(int), 1, img);
     // fseek(img, 4, SEEK_CUR);
     // fread(&data.height, sizeof(int), 1, img);
     printf("size: %d\n", data.biSize);
-    // printf("width: %d\nheight: %d\n", data.biWidth, data.biHeight);
+    printf("width: %ld\nheight: %ld\n", data.biWidth, data.biHeight);
 
     fclose(img);
     return 0;
