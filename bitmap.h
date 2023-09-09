@@ -29,8 +29,6 @@ enum BMP_HEADER { // TODO: check endianness (little endian)
     PT = 0x4950  // OS/2 pointer
 };
 
-// TODO: check if LONGS are translated correctly
-
 typedef struct {
     const uint32_t bcSize;
     const uint16_t bcWidth;
@@ -63,29 +61,28 @@ typedef struct {
 
 typedef struct tagBITMAPINFOHEADER {
     const uint32_t biSize;
-    const long biWidth;
-    const long biHeight;
+    const uint32_t biWidth;
+    const uint32_t biHeight;
     const uint16_t biPlanes;
     const uint16_t biBitCount;
     const uint32_t biCompression;
     const uint32_t biSizeImage;
-    const long biXPelsPerMeter;
-    const long biYPelsPerMeter;
+    const uint32_t biXPelsPerMeter;
+    const uint32_t biYPelsPerMeter;
     const uint32_t biClrUsed;
     const uint32_t biClrImportant;
 } __attribute__((packed)) BITMAPINFOHEADER;
 
-//
 typedef struct tagBITMAPV2INFOHEADER {
     const uint32_t bi2Size;
-    const uint64_t bi2Width;
-    const uint64_t bi2Height;
+    const uint32_t bi2Width;
+    const uint32_t bi2Height;
     const uint16_t bi2Planes;
     const uint16_t bi2BitCount;
     const uint32_t bi2Compression;
     const uint32_t bi2SizeImage;
-    const uint64_t bi2XPelsPerMeter;
-    const uint64_t bi2YPelsPerMeter;
+    const uint32_t bi2XPelsPerMeter;
+    const uint32_t bi2YPelsPerMeter;
     const uint32_t bi2ClrUsed;
     const uint32_t bi2ClrImportant;
     const uint32_t bi2RedMask;
@@ -95,14 +92,14 @@ typedef struct tagBITMAPV2INFOHEADER {
 
 typedef struct tagBITMAPV3INFOHEADER {
     const uint32_t bi3Size;
-    const uint64_t bi3Width;
-    const uint64_t bi3Height;
+    const uint32_t bi3Width;
+    const uint32_t bi3Height;
     const uint16_t bi3Planes;
     const uint16_t bi3BitCount;
     const uint32_t bi3Compression;
     const uint32_t bi3SizeImage;
-    const uint64_t bi3XPelsPerMeter;
-    const uint64_t bi3YPelsPerMeter;
+    const uint32_t bi3XPelsPerMeter;
+    const uint32_t bi3YPelsPerMeter;
     const uint32_t bi3ClrUsed;
     const uint32_t bi3ClrImportant;
     const uint32_t bi3RedMask;
@@ -113,14 +110,14 @@ typedef struct tagBITMAPV3INFOHEADER {
 
 typedef struct tagBITMAPV4INFOHEADER {
     const uint32_t bi4Size;
-    const uint64_t bi4Width;
-    const uint64_t bi4Height;
+    const uint32_t bi4Width;
+    const uint32_t bi4Height;
     const uint16_t bi4Planes;
     const uint16_t bi4BitCount;
     const uint32_t bi4Compression;
     const uint32_t bi4SizeImage;
-    const uint64_t bi4XPelsPerMeter;
-    const uint64_t bi4YPelsPerMeter;
+    const uint32_t bi4XPelsPerMeter;
+    const uint32_t bi4YPelsPerMeter;
     const uint32_t bi4ClrUsed;
     const uint32_t bi4ClrImportant;
     const uint32_t bi4RedMask;
@@ -135,14 +132,14 @@ typedef struct tagBITMAPV4INFOHEADER {
 
 typedef struct tagBITMAPV5INFOHEADER {
     const uint32_t bi5Size;
-    const uint64_t bi5Width;
-    const uint64_t bi5Height;
+    const uint32_t bi5Width;
+    const uint32_t bi5Height;
     const uint16_t bi5Planes;
     const uint16_t bi5BitCount;
     const uint32_t bi5Compression;
     const uint32_t bi5SizeImage;
-    const uint64_t bi5XPelsPerMeter;
-    const uint64_t bi5YPelsPerMeter;
+    const uint32_t bi5XPelsPerMeter;
+    const uint32_t bi5YPelsPerMeter;
     const uint32_t bi5ClrUsed;
     const uint32_t bi5ClrImportant;
     const uint32_t bi5RedMask;
