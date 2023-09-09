@@ -4,7 +4,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define BM_INFO 18
+#define BM_BITMAPFILEHEADER 14*2
+
+typedef struct tagBITMAPFILEHEADER {
+    const uint16_t bfType;
+    const uint32_t bfSize;
+    const uint16_t bfReserved1;
+    const uint16_t bfReserved2;
+    const uint32_t bfOffBits;
+} __attribute__((packed))BITMAPFILEHEADER;
 
 typedef long FXPT2DOT30;
 
@@ -20,7 +28,7 @@ typedef struct tagICEXYZTRIPLE {
     CIEXYZ ciexyzBlue;
 } CIEXYZTRIPLE;
 
-enum BMP_HEADER { // TODO: check endianness (little endian)
+enum BMP_SIGNATURE { // TODO: check endianness (little endian)
     BM = 0x4D42, // Windows 3.1x, 95, NT, ... etc.
     BA = 0x4142, // OS/2 struct bitmap array
     CI = 0x4943, // OS/2 struct color icon
@@ -156,7 +164,8 @@ typedef struct tagBITMAPV5INFOHEADER {
     const uint32_t bi5Reserved;
 } __attribute((packed)) BITMAPV5INFOHEADER;
 
-bool validate_BMP(uint16_t signature);
+bool validate_BMP(uint16_t signature); // TODO: are all bitmap file headers 2 bytes? prob not
+void structure_BMP(uint16_t signature);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_

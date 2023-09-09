@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "bitmap.h"
 
 bool validate_BMP(uint16_t signature) {
@@ -12,4 +15,8 @@ bool validate_BMP(uint16_t signature) {
         default:
             return false;
     }
+}
+
+void structure_BMP(uint16_t signature) {
+
 }
