@@ -1,8 +1,10 @@
+// test files: https://eclecticgeek.com/dompdf/core_tests/image_bmp.html
 #ifndef __BITMAP_H_
 #define __BITMAP_H_
 // #pragma pack(push, 1)
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #define BM_BITMAPFILEHEADER 14*2
 
@@ -12,7 +14,7 @@ typedef struct tagBITMAPFILEHEADER {
     const uint16_t bfReserved1;
     const uint16_t bfReserved2;
     const uint32_t bfOffBits;
-} __attribute__((packed))BITMAPFILEHEADER;
+} __attribute__((packed)) BITMAPFILEHEADER;
 
 typedef long FXPT2DOT30;
 
@@ -35,6 +37,18 @@ enum BMP_SIGNATURE { // TODO: check endianness (little endian)
     CP = 0x5043, // OS/2 const color pointer
     IC = 0x4349, // OS/2 struct icon
     PT = 0x4950  // OS/2 pointer
+};
+
+// header size that corresponds to header struct
+enum BMP_STRUCT {
+    CORE = 12,
+    CORE2 = 64,
+    CORE2V2 = 16,
+    INFO = 40,
+    INFOV2 = 52,
+    INFOV3 = 56,
+    INFOV4 = 108, // 140?
+    INFOV5 = 124 // 156?
 };
 
 typedef struct {
@@ -164,8 +178,10 @@ typedef struct tagBITMAPV5INFOHEADER {
     const uint32_t bi5Reserved;
 } __attribute((packed)) BITMAPV5INFOHEADER;
 
-bool validate_BMP(uint16_t signature); // TODO: are all bitmap file headers 2 bytes? prob not
-void structure_BMP(uint16_t signature);
+bool validate_BMP(uint16_t signature);
+void header_BMP(uint32_t size);
+void *get_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
+void zero_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_
