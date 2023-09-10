@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "bitmap.h"
 
@@ -26,10 +27,18 @@ int main(int argc, char *argv[]) {
     fread(&data, sizeof(BITMAPV5INFOHEADER), 1, img);
     zero_BMP(data.bi5Size, &data);
 
-    unsigned char *pixels = get_BMP(data, img, bfh.bfOffBits);
+    Color pixc = {
+        .r = 100,
+        .g = 0,
+        .b = 0,
+    };
+    set_pixel_BMP(0, pixc, 10, data, bfh.bfOffBits, img);
+
+    unsigned char *pixels = get_pixmap_BMP(data, img, bfh.bfOffBits);
     for(int i = 0; i < data.bi5SizeImage; i++)
         printf("%d, ", pixels[i]);
     printf("\n");
+    free(pixels);
 
     fclose(img);
     return 0;

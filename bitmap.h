@@ -8,6 +8,12 @@
 
 #define BM_BITMAPFILEHEADER 14*2
 
+typedef struct {
+    const uint8_t r;
+    const uint8_t g;
+    const uint8_t b;
+} __attribute__((packed)) Color;
+
 typedef struct tagBITMAPFILEHEADER {
     const uint16_t bfType;
     const uint32_t bfSize;
@@ -180,8 +186,9 @@ typedef struct tagBITMAPV5INFOHEADER {
 
 bool validate_BMP(uint16_t signature);
 void header_BMP(uint32_t size);
-void *get_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
+void *get_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
 void zero_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
+void set_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_
