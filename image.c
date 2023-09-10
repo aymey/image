@@ -32,9 +32,9 @@ int main(int argc, char *argv[]) {
         .g = 0,
         .b = 0,
     };
-    set_pixel_BMP(0, pixc, 10, data, bfh.bfOffBits, img);
+    write_pixel_BMP(0, pixc, 10, data, bfh.bfOffBits, img);
 
-    unsigned char *pixels = get_pixmap_BMP(data, img, bfh.bfOffBits);
+    unsigned char *pixels = read_pixmap_BMP(data, img, bfh.bfOffBits);
     for(int i = 0; i < data.bi5SizeImage; i++)
         printf("%d, ", pixels[i]);
     printf("\n");

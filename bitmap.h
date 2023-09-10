@@ -186,9 +186,9 @@ typedef struct tagBITMAPV5INFOHEADER {
 
 bool validate_BMP(uint16_t signature);
 void header_BMP(uint32_t size);
-void *get_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
+void *read_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
 void zero_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
-void set_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
+void write_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_
