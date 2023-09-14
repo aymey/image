@@ -1,4 +1,4 @@
-// test files: https://eclecticgeek.com/dompdf/core_tests/image_bmp.html
+// test images: https://eclecticgeek.com/dompdf/core_tests/image_bmp.html
 #ifndef __BITMAP_H_
 #define __BITMAP_H_
 // #pragma pack(push, 1)
@@ -185,12 +185,12 @@ typedef struct tagBITMAPV5INFOHEADER {
 } __attribute((packed)) BITMAPV5INFOHEADER;
 
 bool validate_BMP(uint16_t signature);
-BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);
-BITMAPFILEHEADER load_BFH_BMP(FILE *img);
-void header_BMP(uint32_t size);
-void *read_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
 void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
-void write_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
+BITMAPFILEHEADER load_BFH_BMP(FILE *img);
+BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);
+void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
+void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
+void save_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_

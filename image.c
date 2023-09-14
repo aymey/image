@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
         printf("supply an input and output image path\n");
         return 1;
     }
-    FILE *img = fopen(argv[1], "rb+wb");
+    FILE *img = fopen(argv[1], "r+wb");
     if(!img) {
         printf("unable to open image \"%s\"\n", argv[1]);
         return 1;
@@ -23,19 +23,20 @@ int main(int argc, char *argv[]) {
     BITMAPV5INFOHEADER data = load_DIB_BMP(img);
 
     Color pixc = {
-        .b = 100,
-        .g = 100,
-        .r = 100,
+        .b = 0,
+        .g = 0,
+        .r = 255,
     };
-    write_pixel_BMP(0, pixc, data.bi5Width*2, data, bfh.bfOffBits, img);
+    save_pixel_BMP(0, pixc, data.bi5Width*4, data, bfh.bfOffBits, img);
 
-    unsigned char *pixels = read_pixmap_BMP(data, img, bfh.bfOffBits);
+    unsigned char *pixels = load_pixmap_BMP(data, img, bfh.bfOffBits);
     for(int i = 0; i < data.bi5SizeImage; i++)
         printf("[%X: %d], ", pixels[i], pixels[i]);
     printf("\n");
     free(pixels);
 
     printf("%d\n", data.bi5BitCount);
+    printf("%d\n", data.bi5Width);
 
     fclose(img);
     return 0;
