@@ -9,6 +9,8 @@
 
 
 // TODO: bit pack pixel information incase of bpp not being a multiple of 8. How does anyone else handle this?
+// TODO: colorspace interpretation
+// TODO: wrongly padding possibly?
 
 bool validate_BMP(uint16_t signature) {
     switch(signature) {

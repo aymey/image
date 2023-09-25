@@ -184,15 +184,19 @@ typedef struct tagBITMAPV5INFOHEADER {
     uint32_t bi5Reserved;
 } __attribute((packed)) BITMAPV5INFOHEADER;
 
-bool validate_BMP(uint16_t signature);
-BITMAPFILEHEADER load_BFH_BMP(FILE *img);
-void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);
-void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
-BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);
-void save_DIB_BMP(BITMAPV5INFOHEADER DIB, FILE *img);
-void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
-void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
-void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
+/* general */
+bool validate_BMP(uint16_t signature);                        // verifies if the file is a bitmap file via a signature
+/* BFH */
+BITMAPFILEHEADER load_BFH_BMP(FILE *img);                     // reads the BFH
+void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);           // writes a BFH
+/* DIB */
+void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer); // clears unused members of the BITMAPV5INFOHEADER
+BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);                   // reads the DIB
+void save_DIB_BMP(BITMAPV5INFOHEADER DIB, FILE *img);         // writes a DIB
+/* pixel */
+void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits); // reads the pixmap
+void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits); // reads pixels
+void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img); // writes pixels
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_

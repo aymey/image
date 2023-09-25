@@ -2,9 +2,12 @@ CC = gcc
 CFLAGS = -Wall -g -lm
 TARGET = image
 
-all: image
+BITMAP_PATH = ./bitmap
 
-image: *.c *.h
-	$(CC) $(CFLAGS) $(TARGET).c bitmap.c -o $(TARGET)
+all: bitmap
+image: all
 
-.PHONY: all image
+bitmap: $(BITMAP_PATH)/*.c $(BITMAP_PATH)/*.h
+	$(CC) $(CFLAGS) $(BITMAP_PATH)/$(TARGET)_bitmap.c $(BITMAP_PATH)/bitmap.c -o $(TARGET)
+
+.PHONY: all bitmap
