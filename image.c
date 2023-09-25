@@ -22,21 +22,13 @@ int main(int argc, char *argv[]) {
     }
     BITMAPV5INFOHEADER data = load_DIB_BMP(img);
 
-    Color pixc = {
+    const Colour_BMP pixc = {
         .b = 0,
-        .g = 0,
-        .r = 255,
+        .g = 255,
+        .r = 0,
     };
-    save_pixel_BMP(0, pixc, data.bi5Width*4, data, bfh.bfOffBits, img);
-
-    unsigned char *pixels = load_pixmap_BMP(data, img, bfh.bfOffBits);
-    for(int i = 0; i < data.bi5SizeImage; i++)
-        printf("[%X: %d], ", pixels[i], pixels[i]);
-    printf("\n");
-    free(pixels);
-
-    printf("%d\n", data.bi5BitCount);
-    printf("%d\n", data.bi5Width);
+    save_pixel_BMP(0, pixc, data.bi5SizeImage, data, bfh.bfOffBits, img);
+    printf("test (%X): %d\n", bfh.bfOffBits, bfh.bfOffBits);
 
     fclose(img);
     return 0;

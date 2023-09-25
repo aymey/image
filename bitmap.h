@@ -6,20 +6,20 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define BM_BITMAPFILEHEADER 14*2
+#define BITMAPFILEHEADER_BMP 14
 
 typedef struct {
-    const uint8_t b;
-    const uint8_t g;
-    const uint8_t r;
-} __attribute__((packed)) Color;
+    uint8_t b;
+    uint8_t g;
+    uint8_t r;
+} __attribute__((packed)) Colour_BMP;
 
 typedef struct tagBITMAPFILEHEADER {
-    const uint16_t bfType;
-    const uint32_t bfSize;
-    const uint16_t bfReserved1;
-    const uint16_t bfReserved2;
-    const uint32_t bfOffBits;
+    uint16_t bfType;
+    uint32_t bfSize;
+    uint16_t bfReserved1;
+    uint16_t bfReserved2;
+    uint32_t bfOffBits;
 } __attribute__((packed)) BITMAPFILEHEADER;
 
 typedef long FXPT2DOT30;
@@ -39,8 +39,8 @@ typedef struct tagICEXYZTRIPLE {
 enum BMP_SIGNATURE { // TODO: check endianness (little endian)
     BM = 0x4D42, // Windows 3.1x, 95, NT, ... etc.
     BA = 0x4142, // OS/2 struct bitmap array
-    CI = 0x4943, // OS/2 struct color icon
-    CP = 0x5043, // OS/2 const color pointer
+    CI = 0x4943, // OS/2 struct colour icon
+    CP = 0x5043, // OS/2 const colour pointer
     IC = 0x4349, // OS/2 struct icon
     PT = 0x4950  // OS/2 pointer
 };
@@ -58,139 +58,141 @@ enum BMP_STRUCT {
 };
 
 typedef struct {
-    const uint32_t bcSize;
-    const uint16_t bcWidth;
-    const uint16_t bcHeight;
-    const uint16_t bcPlanes;
-    const uint16_t bcBitCount;
+    uint32_t bcSize;
+    uint16_t bcWidth;
+    uint16_t bcHeight;
+    uint16_t bcPlanes;
+    uint16_t bcBitCount;
 } __attribute__((packed)) BITMAPCOREHEADER, OS21XBITMAPHEADER;
 
 typedef struct {
-    const uint32_t bc2Size;
-    const uint16_t bc2Width;
-    const uint16_t bc2Height;
-    const uint16_t bc2Planes;
-    const uint16_t bc2BitCount;
-    const uint32_t bc2Compression;
-    const uint32_t bc2SizeImage;
-    const uint32_t bc2XRes;
-    const uint32_t bc2YRes;
-    const uint32_t bc2ClrUsed;
-    const uint32_t bc2ClrImportant;
-    const uint16_t bc2ResUnit;
-    const uint16_t bc2Reserved;
-    const uint16_t bc2Orientation;
-    const uint16_t bc2Halftoning;
-    const uint32_t bc2HalftoneSize1;
-    const uint32_t bc2HalftoneSize2;
-    const uint32_t bc2ColorSpace;
-    const uint32_t bc2AppData;
+    uint32_t bc2Size;
+    uint16_t bc2Width;
+    uint16_t bc2Height;
+    uint16_t bc2Planes;
+    uint16_t bc2BitCount;
+    uint32_t bc2Compression;
+    uint32_t bc2SizeImage;
+    uint32_t bc2XRes;
+    uint32_t bc2YRes;
+    uint32_t bc2ClrUsed;
+    uint32_t bc2ClrImportant;
+    uint16_t bc2ResUnit;
+    uint16_t bc2Reserved;
+    uint16_t bc2Orientation;
+    uint16_t bc2Halftoning;
+    uint32_t bc2HalftoneSize1;
+    uint32_t bc2HalftoneSize2;
+    uint32_t bc2ColorSpace;
+    uint32_t bc2AppData;
 } __attribute__((packed)) BITMAPCOREHEADER2, OS22XBITMAPHEADER;
 
 typedef struct tagBITMAPINFOHEADER {
-    const uint32_t biSize;
-    const uint32_t biWidth;
-    const uint32_t biHeight;
-    const uint16_t biPlanes;
-    const uint16_t biBitCount;
-    const uint32_t biCompression;
-    const uint32_t biSizeImage;
-    const uint32_t biXPelsPerMeter;
-    const uint32_t biYPelsPerMeter;
-    const uint32_t biClrUsed;
-    const uint32_t biClrImportant;
+    uint32_t biSize;
+    uint32_t biWidth;
+    uint32_t biHeight;
+    uint16_t biPlanes;
+    uint16_t biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    uint32_t biXPelsPerMeter;
+    uint32_t biYPelsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
 } __attribute__((packed)) BITMAPINFOHEADER;
 
 typedef struct tagBITMAPV2INFOHEADER {
-    const uint32_t bi2Size;
-    const uint32_t bi2Width;
-    const uint32_t bi2Height;
-    const uint16_t bi2Planes;
-    const uint16_t bi2BitCount;
-    const uint32_t bi2Compression;
-    const uint32_t bi2SizeImage;
-    const uint32_t bi2XPelsPerMeter;
-    const uint32_t bi2YPelsPerMeter;
-    const uint32_t bi2ClrUsed;
-    const uint32_t bi2ClrImportant;
-    const uint32_t bi2RedMask;
-    const uint32_t bi2GreenMask;
-    const uint32_t bi2BlueMask;
+    uint32_t bi2Size;
+    uint32_t bi2Width;
+    uint32_t bi2Height;
+    uint16_t bi2Planes;
+    uint16_t bi2BitCount;
+    uint32_t bi2Compression;
+    uint32_t bi2SizeImage;
+    uint32_t bi2XPelsPerMeter;
+    uint32_t bi2YPelsPerMeter;
+    uint32_t bi2ClrUsed;
+    uint32_t bi2ClrImportant;
+    uint32_t bi2RedMask;
+    uint32_t bi2GreenMask;
+    uint32_t bi2BlueMask;
 } __attribute((packed)) BITMAPV2INFOHEADER;
 
 typedef struct tagBITMAPV3INFOHEADER {
-    const uint32_t bi3Size;
-    const uint32_t bi3Width;
-    const uint32_t bi3Height;
-    const uint16_t bi3Planes;
-    const uint16_t bi3BitCount;
-    const uint32_t bi3Compression;
-    const uint32_t bi3SizeImage;
-    const uint32_t bi3XPelsPerMeter;
-    const uint32_t bi3YPelsPerMeter;
-    const uint32_t bi3ClrUsed;
-    const uint32_t bi3ClrImportant;
-    const uint32_t bi3RedMask;
-    const uint32_t bi3GreenMask;
-    const uint32_t bi3BlueMask;
-    const uint32_t bi3AlphaMask;
+    uint32_t bi3Size;
+    uint32_t bi3Width;
+    uint32_t bi3Height;
+    uint16_t bi3Planes;
+    uint16_t bi3BitCount;
+    uint32_t bi3Compression;
+    uint32_t bi3SizeImage;
+    uint32_t bi3XPelsPerMeter;
+    uint32_t bi3YPelsPerMeter;
+    uint32_t bi3ClrUsed;
+    uint32_t bi3ClrImportant;
+    uint32_t bi3RedMask;
+    uint32_t bi3GreenMask;
+    uint32_t bi3BlueMask;
+    uint32_t bi3AlphaMask;
 } __attribute((packed)) BITMAPV3INFOHEADER;
 
 typedef struct tagBITMAPV4INFOHEADER {
-    const uint32_t bi4Size;
-    const uint32_t bi4Width;
-    const uint32_t bi4Height;
-    const uint16_t bi4Planes;
-    const uint16_t bi4BitCount;
-    const uint32_t bi4Compression;
-    const uint32_t bi4SizeImage;
-    const uint32_t bi4XPelsPerMeter;
-    const uint32_t bi4YPelsPerMeter;
-    const uint32_t bi4ClrUsed;
-    const uint32_t bi4ClrImportant;
-    const uint32_t bi4RedMask;
-    const uint32_t bi4GreenMask;
-    const uint32_t bi4BlueMask;
-    const uint32_t bi4AlphaMask;
-    const CIEXYZTRIPLE bi4Endpoints;
-    const uint32_t bi4GammaRed;
-    const uint32_t bi4GammaGreen;
-    const uint32_t bi4GammaBlue;
+    uint32_t bi4Size;
+    uint32_t bi4Width;
+    uint32_t bi4Height;
+    uint16_t bi4Planes;
+    uint16_t bi4BitCount;
+    uint32_t bi4Compression;
+    uint32_t bi4SizeImage;
+    uint32_t bi4XPelsPerMeter;
+    uint32_t bi4YPelsPerMeter;
+    uint32_t bi4ClrUsed;
+    uint32_t bi4ClrImportant;
+    uint32_t bi4RedMask;
+    uint32_t bi4GreenMask;
+    uint32_t bi4BlueMask;
+    uint32_t bi4AlphaMask;
+    CIEXYZTRIPLE bi4Endpoints;
+    uint32_t bi4GammaRed;
+    uint32_t bi4GammaGreen;
+    uint32_t bi4GammaBlue;
 } __attribute((packed)) BITMAPV4INFOHEADER;
 
 typedef struct tagBITMAPV5INFOHEADER {
-    const uint32_t bi5Size;
-    const uint32_t bi5Width;
-    const uint32_t bi5Height;
-    const uint16_t bi5Planes;
-    const uint16_t bi5BitCount;
-    const uint32_t bi5Compression;
-    const uint32_t bi5SizeImage;
-    const uint32_t bi5XPelsPerMeter;
-    const uint32_t bi5YPelsPerMeter;
-    const uint32_t bi5ClrUsed;
-    const uint32_t bi5ClrImportant;
-    const uint32_t bi5RedMask;
-    const uint32_t bi5GreenMask;
-    const uint32_t bi5BlueMask;
-    const uint32_t bi5AlphaMask;
-    const CIEXYZTRIPLE bi5Endpoints;
-    const uint32_t bi5GammaRed;
-    const uint32_t bi5GammaGreen;
-    const uint32_t bi5GammaBlue;
-    const uint32_t bi5Intent;
-    const uint32_t bi5ProfileData;
-    const uint32_t bi5ProfileSize;
-    const uint32_t bi5Reserved;
+    uint32_t bi5Size;
+    uint32_t bi5Width;
+    uint32_t bi5Height;
+    uint16_t bi5Planes;
+    uint16_t bi5BitCount;
+    uint32_t bi5Compression;
+    uint32_t bi5SizeImage;
+    uint32_t bi5XPelsPerMeter;
+    uint32_t bi5YPelsPerMeter;
+    uint32_t bi5ClrUsed;
+    uint32_t bi5ClrImportant;
+    uint32_t bi5RedMask;
+    uint32_t bi5GreenMask;
+    uint32_t bi5BlueMask;
+    uint32_t bi5AlphaMask;
+    CIEXYZTRIPLE bi5Endpoints;
+    uint32_t bi5GammaRed;
+    uint32_t bi5GammaGreen;
+    uint32_t bi5GammaBlue;
+    uint32_t bi5Intent;
+    uint32_t bi5ProfileData;
+    uint32_t bi5ProfileSize;
+    uint32_t bi5Reserved;
 } __attribute((packed)) BITMAPV5INFOHEADER;
 
 bool validate_BMP(uint16_t signature);
-void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
 BITMAPFILEHEADER load_BFH_BMP(FILE *img);
+void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);
+void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer);
 BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);
+void save_DIB_BMP(BITMAPV5INFOHEADER DIB, FILE *img);
 void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
 void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits);
-void save_pixel_BMP(uint32_t dest, Color source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
+void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img);
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_

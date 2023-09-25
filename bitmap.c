@@ -8,7 +8,7 @@
 #include "bitmap.h"
 
 
-// TODO: numbers that arent divisible by 24 (8 * 3) work goofily. possible solution is to mix the difference into a byte or bytes using bitwise operations, this wont work for alot of stuff though like if the total isnt divisible by a byte. how do other encoders solve this??
+// TODO: bit pack pixel information incase of bpp not being a multiple of 8. How does anyone else handle this?
 
 bool validate_BMP(uint16_t signature) {
     switch(signature) {
@@ -24,28 +24,40 @@ bool validate_BMP(uint16_t signature) {
     }
 }
 
-void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer) {
-    memset((char *)zeroer + size, 0, sizeof(BITMAPV5INFOHEADER) - size);
-}
-
 BITMAPFILEHEADER load_BFH_BMP(FILE *img) {
+    fseek(img, 0, SEEK_SET);
     BITMAPFILEHEADER BFH;
     fread(&BFH, sizeof(BITMAPFILEHEADER), 1, img);
     return BFH;
 } // TODO: esure file pointer automatically changes
 
+void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img) {
+    fseek(img, 0, SEEK_SET);
+    fwrite(&BFH, BITMAPFILEHEADER_BMP, 1, img);
+}
+
+void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer) {
+    memset((char *)zeroer + size, 0, sizeof(BITMAPV5INFOHEADER) - size);
+}
+
 BITMAPV5INFOHEADER load_DIB_BMP(FILE *img) {
+    fseek(img, BITMAPFILEHEADER_BMP, SEEK_SET);
     BITMAPV5INFOHEADER DIB;
     fread(&DIB, sizeof(BITMAPV5INFOHEADER), 1, img);
     zero_DIB_BMP(DIB.bi5Size, &DIB);
     return DIB;
 }
 
+void save_DIB_BMP(BITMAPV5INFOHEADER DIB, FILE *img) {
+    fseek(img, 0, SEEK_SET);
+    fwrite(&DIB, DIB.bi5Size, 1, img);
+}
+
 void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits) {
     const uint32_t image_size = info.bi5SizeImage;
     void *pixels = malloc(image_size);
     fseek(img, OffBits, SEEK_SET);
-    fread(pixels, ceil(info.bi5BitCount / 8.), image_size, img); // TODO: non whole bytes work weirdly
+    fread(pixels, ceil(info.bi5BitCount / 8.), image_size, img);
     return pixels;
 }
 
@@ -58,7 +70,7 @@ void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits) {
     return colours;
 }
 
-void save_pixel_BMP(uint32_t dest, Color src, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img) {
+void save_pixel_BMP(uint32_t dest, Colour_BMP src, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img) {
     const uint8_t byte_count = ceil(info.bi5BitCount / 8.);
     fseek(img, byte_count*(OffBits + dest), SEEK_SET);
     const uint8_t pad = 0;
