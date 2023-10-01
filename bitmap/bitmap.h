@@ -45,18 +45,6 @@ enum BMP_SIGNATURE { // TODO: check endianness (little endian)
     PT = 0x4950  // OS/2 pointer
 };
 
-// header size that corresponds to header struct
-enum BMP_STRUCT {
-    CORE = 12,
-    CORE2 = 64,
-    CORE2V2 = 16,
-    INFO = 40,
-    INFOV2 = 52,
-    INFOV3 = 56,
-    INFOV4 = 108, // 140?
-    INFOV5 = 124 // 156?
-};
-
 typedef struct {
     uint32_t bcSize;
     uint16_t bcWidth;
@@ -102,87 +90,87 @@ typedef struct tagBITMAPINFOHEADER {
 } __attribute__((packed)) BITMAPINFOHEADER;
 
 typedef struct tagBITMAPV2INFOHEADER {
-    uint32_t bi2Size;
-    uint32_t bi2Width;
-    uint32_t bi2Height;
-    uint16_t bi2Planes;
-    uint16_t bi2BitCount;
-    uint32_t bi2Compression;
-    uint32_t bi2SizeImage;
-    uint32_t bi2XPelsPerMeter;
-    uint32_t bi2YPelsPerMeter;
-    uint32_t bi2ClrUsed;
-    uint32_t bi2ClrImportant;
-    uint32_t bi2RedMask;
-    uint32_t bi2GreenMask;
-    uint32_t bi2BlueMask;
-} __attribute((packed)) BITMAPV2INFOHEADER;
+    uint32_t bV2Size;
+    uint32_t bV2Width;
+    uint32_t bV2Height;
+    uint16_t bV2Planes;
+    uint16_t bV2BitCount;
+    uint32_t bV2Compression;
+    uint32_t bV2SizeImage;
+    uint32_t bV2XPelsPerMeter;
+    uint32_t bV2YPelsPerMeter;
+    uint32_t bV2ClrUsed;
+    uint32_t bV2ClrImportant;
+    uint32_t bV2RedMask;
+    uint32_t bV2GreenMask;
+    uint32_t bV2BlueMask;
+} __attribute((packed)) BITMAPV2HEADER;
 
 typedef struct tagBITMAPV3INFOHEADER {
-    uint32_t bi3Size;
-    uint32_t bi3Width;
-    uint32_t bi3Height;
-    uint16_t bi3Planes;
-    uint16_t bi3BitCount;
-    uint32_t bi3Compression;
-    uint32_t bi3SizeImage;
-    uint32_t bi3XPelsPerMeter;
-    uint32_t bi3YPelsPerMeter;
-    uint32_t bi3ClrUsed;
-    uint32_t bi3ClrImportant;
-    uint32_t bi3RedMask;
-    uint32_t bi3GreenMask;
-    uint32_t bi3BlueMask;
-    uint32_t bi3AlphaMask;
-} __attribute((packed)) BITMAPV3INFOHEADER;
+    uint32_t bV3Size;
+    uint32_t bV3Width;
+    uint32_t bV3Height;
+    uint16_t bV3Planes;
+    uint16_t bV3BitCount;
+    uint32_t bV3Compression;
+    uint32_t bV3SizeImage;
+    uint32_t bV3XPelsPerMeter;
+    uint32_t bV3YPelsPerMeter;
+    uint32_t bV3ClrUsed;
+    uint32_t bV3ClrImportant;
+    uint32_t bV3RedMask;
+    uint32_t bV3GreenMask;
+    uint32_t bV3BlueMask;
+    uint32_t bV3AlphaMask;
+} __attribute((packed)) BITMAPV3HEADER;
 
 typedef struct tagBITMAPV4INFOHEADER {
-    uint32_t bi4Size;
-    uint32_t bi4Width;
-    uint32_t bi4Height;
-    uint16_t bi4Planes;
-    uint16_t bi4BitCount;
-    uint32_t bi4Compression;
-    uint32_t bi4SizeImage;
-    uint32_t bi4XPelsPerMeter;
-    uint32_t bi4YPelsPerMeter;
-    uint32_t bi4ClrUsed;
-    uint32_t bi4ClrImportant;
-    uint32_t bi4RedMask;
-    uint32_t bi4GreenMask;
-    uint32_t bi4BlueMask;
-    uint32_t bi4AlphaMask;
+    uint32_t bV4Size;
+    uint32_t bV4Width;
+    uint32_t bV4Height;
+    uint16_t bV4Planes;
+    uint16_t bV4BitCount;
+    uint32_t bV4Compression;
+    uint32_t bV4SizeImage;
+    uint32_t bV4XPelsPerMeter;
+    uint32_t bV4YPelsPerMeter;
+    uint32_t bV4ClrUsed;
+    uint32_t bV4ClrImportant;
+    uint32_t bV4RedMask;
+    uint32_t bV4GreenMask;
+    uint32_t bV4BlueMask;
+    uint32_t bV4AlphaMask;
     CIEXYZTRIPLE bi4Endpoints;
-    uint32_t bi4GammaRed;
-    uint32_t bi4GammaGreen;
-    uint32_t bi4GammaBlue;
-} __attribute((packed)) BITMAPV4INFOHEADER;
+    uint32_t bV4GammaRed;
+    uint32_t bV4GammaGreen;
+    uint32_t bV4GammaBlue;
+} __attribute((packed)) BITMAPV4HEADER;
 
 typedef struct tagBITMAPV5INFOHEADER {
-    uint32_t bi5Size;
-    uint32_t bi5Width;
-    uint32_t bi5Height;
-    uint16_t bi5Planes;
-    uint16_t bi5BitCount;
-    uint32_t bi5Compression;
-    uint32_t bi5SizeImage;
-    uint32_t bi5XPelsPerMeter;
-    uint32_t bi5YPelsPerMeter;
-    uint32_t bi5ClrUsed;
-    uint32_t bi5ClrImportant;
-    uint32_t bi5RedMask;
-    uint32_t bi5GreenMask;
-    uint32_t bi5BlueMask;
-    uint32_t bi5AlphaMask;
+    uint32_t bV5Size;
+    uint32_t bV5Width;
+    uint32_t bV5Height;
+    uint16_t bV5Planes;
+    uint16_t bV5BitCount;
+    uint32_t bV5Compression;
+    uint32_t bV5SizeImage;
+    uint32_t bV5XPelsPerMeter;
+    uint32_t bV5YPelsPerMeter;
+    uint32_t bV5ClrUsed;
+    uint32_t bV5ClrImportant;
+    uint32_t bV5RedMask;
+    uint32_t bV5GreenMask;
+    uint32_t bV5BlueMask;
+    uint32_t bV5AlphaMask;
     CIEXYZTRIPLE bi5Endpoints;
-    uint32_t bi5GammaRed;
-    uint32_t bi5GammaGreen;
-    uint32_t bi5GammaBlue;
-    uint32_t bi5Intent;
-    uint32_t bi5ProfileData;
-    uint32_t bi5ProfileSize;
-    uint32_t bi5Reserved;
-} __attribute((packed)) BITMAPV5INFOHEADER;
+    uint32_t bV5GammaRed;
+    uint32_t bV5GammaGreen;
+    uint32_t bV5GammaBlue;
+    uint32_t bV5Intent;
+    uint32_t bV5ProfileData;
+    uint32_t bV5ProfileSize;
+    uint32_t bV5Reserved;
+} __attribute((packed)) BITMAPV5HEADER;
 
 /* general */
 bool validate_BMP(uint16_t signature);                        // verifies if the file is a bitmap file via a signature
@@ -190,13 +178,13 @@ bool validate_BMP(uint16_t signature);                        // verifies if the
 BITMAPFILEHEADER load_BFH_BMP(FILE *img);                     // reads the BFH
 void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);           // writes a BFH
 /* DIB */
-void zero_DIB_BMP(uint32_t size, BITMAPV5INFOHEADER *zeroer); // clears unused members of the BITMAPV5INFOHEADER
-BITMAPV5INFOHEADER load_DIB_BMP(FILE *img);                   // reads the DIB
-void save_DIB_BMP(BITMAPV5INFOHEADER DIB, FILE *img);         // writes a DIB
+void zero_DIB_BMP(uint32_t size, BITMAPV5HEADER *zeroer); // clears unused members of the BITMAPV5INFOHEADER
+BITMAPV5HEADER load_DIB_BMP(FILE *img);                   // reads the DIB
+void save_DIB_BMP(BITMAPV5HEADER DIB, FILE *img);         // writes a DIB
 /* pixel */
-void *load_pixmap_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits); // reads the pixmap
-void *load_pixels_BMP(BITMAPV5INFOHEADER info, FILE *img, uint32_t OffBits); // reads pixels
-void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5INFOHEADER info, uint32_t OffBits, FILE *img); // writes pixels
+void *load_pixmap_BMP(BITMAPV5HEADER info, FILE *img, uint32_t OffBits); // reads the pixmap
+void *load_pixels_BMP(BITMAPV5HEADER info, FILE *img, uint32_t OffBits); // reads pixels
+void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5HEADER info, uint32_t OffBits, FILE *img); // writes pixels
 
 // #pragma pack(pop)
 #endif // __FORMATS_H_

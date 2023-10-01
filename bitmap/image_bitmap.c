@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {
-        printf("supply an input path\n");
+        printf("supply an image path\n");
         return 1;
     }
     FILE *img = fopen(argv[1], "r+wb");
@@ -20,15 +20,14 @@ int main(int argc, char *argv[]) {
         fclose(img);
         return 1;
     }
-    BITMAPV5INFOHEADER data = load_DIB_BMP(img);
+    BITMAPV5HEADER data = load_DIB_BMP(img);
 
     const Colour_BMP pixc = {
         .b = 0,
         .g = 255,
         .r = 0,
     };
-    save_pixel_BMP(0, pixc, data.bi5SizeImage, data, bfh.bfOffBits, img);
-    printf("test (%X): %d\n", bfh.bfOffBits, bfh.bfOffBits);
+    save_pixel_BMP(0, pixc, data.bV5SizeImage, data, bfh.bfOffBits, img);
 
     fclose(img);
     return 0;
