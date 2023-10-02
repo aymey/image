@@ -9,7 +9,7 @@
 
 // TODO: bit pack pixel information incase of bpp not being a multiple of 8. How does anyone else handle this?
 // TODO: colorspace interpretation
-// TODO: padding issues causing the
+// TODO: padding issues, cant write in certain offsets of the image
 // TODO: deal compression (decompress & compress features)
 
 bool validate_BMP(uint16_t signature) {
@@ -51,7 +51,7 @@ BITMAPV5HEADER load_DIB_BMP(FILE *img) {
 }
 
 void save_DIB_BMP(BITMAPV5HEADER DIB, FILE *img) {
-    fseek(img, 0, SEEK_SET);
+    fseek(img, BITMAPFILEHEADER_BMP, SEEK_SET);
     fwrite(&DIB, DIB.bV5Size, 1, img);
 }
 

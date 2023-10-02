@@ -8,6 +8,7 @@
 
 #define BITMAPFILEHEADER_BMP 14
 
+// TODO: channels may not be a byte, do variable size instead
 typedef struct {
     uint8_t b;
     uint8_t g;
@@ -36,7 +37,7 @@ typedef struct tagICEXYZTRIPLE {
     CIEXYZ ciexyzBlue;
 } CIEXYZTRIPLE;
 
-enum BMP_SIGNATURE { // TODO: check endianness (little endian)
+enum BMP_SIGNATURE {
     BM = 0x4D42, // Windows 3.1x, 95, NT, ... etc.
     BA = 0x4142, // OS/2 struct bitmap array
     CI = 0x4943, // OS/2 struct colour icon
@@ -173,10 +174,10 @@ typedef struct tagBITMAPV5INFOHEADER {
 } __attribute((packed)) BITMAPV5HEADER;
 
 /* general */
-bool validate_BMP(uint16_t signature);                        // verifies if the file is a bitmap file via a signature
+bool validate_BMP(uint16_t signature);                    // verifies if the file is a bitmap file via a signature
 /* BFH */
-BITMAPFILEHEADER load_BFH_BMP(FILE *img);                     // reads the BFH
-void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);           // writes a BFH
+BITMAPFILEHEADER load_BFH_BMP(FILE *img);                 // reads the BFH
+void save_BFH_BMP(BITMAPFILEHEADER BFH, FILE *img);       // writes a BFH
 /* DIB */
 void zero_DIB_BMP(uint32_t size, BITMAPV5HEADER *zeroer); // clears unused members of the BITMAPV5INFOHEADER
 BITMAPV5HEADER load_DIB_BMP(FILE *img);                   // reads the DIB

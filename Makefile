@@ -1,13 +1,17 @@
 CC = gcc
-CFLAGS = -Wall -g -lm
+CFLAGS = -Wall -Wextra -g
 TARGET = image
 
 BITMAP_PATH = ./bitmap
+JPEG_PATH = ./jpeg
 
-all: bitmap
+all: bitmap jpeg
 image: all
 
 bitmap: $(BITMAP_PATH)/*.c $(BITMAP_PATH)/*.h
-	$(CC) $(CFLAGS) $(BITMAP_PATH)/$(TARGET)_bitmap.c $(BITMAP_PATH)/bitmap.c -o $(TARGET)
+	$(CC) -lm $(CFLAGS) $(BITMAP_PATH)/$(TARGET)_bitmap.c $(BITMAP_PATH)/bitmap.c -o $(TARGET)
 
-.PHONY: all bitmap
+jpeg: $(JPEG_PATH)/*.c $(JPEG_PATH)/*.h
+	$(CC) $(CFLAGS) $(JPEG_PATH)/$(TARGET)_jpeg.c $(JPEG_PATH)/jpeg.c -o $(TARGET)
+
+.PHONY: all bitmap jpeg

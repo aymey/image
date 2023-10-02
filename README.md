@@ -1,5 +1,5 @@
 ## image
-image is an independant image encoding and decoding library.
+image is an independant image codec library.
 check out the [wiki](https://github.com/aymey/image/wiki) for more information.
 
 ## usage & installation
