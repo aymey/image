@@ -5,6 +5,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#define MARKER_SIZE 2
+#define MARKER_BYTE 0xFF
+
+#define IS_MARKER(m) (m >> 8 == MARKER_BYTE)
+#define IS_MARKER_APP(m) (m >> 4 == 0xFFE)
+
 enum JFIF_MARKER {
     NUL  = 0x0000 | 0x00FF, // JPEG reserved
     TEM  = 0x0100 | 0x00FF, // Temporary marker for arithmetic encoding
@@ -129,7 +135,7 @@ enum APP_IDENTIFIER {
 typedef struct {
     uint16_t marker;
     uint16_t length;
-    uint8_t identifier[5]; // TODO: whats best way to do this (custom data type, 4 byte identifier 1 byte null terminator)?
+    uint8_t identifier[5];
     uint16_t version;
     uint8_t density_units; // 00: no units, 01: ppi, 02: ppcm
     uint16_t Xdensity;
@@ -142,14 +148,25 @@ typedef struct {
 typedef struct {
     uint16_t marker;
     uint16_t length;
-    uint8_t identifier[5]; // TODO: whats best way to do this (custom data type, 4 byte identifier 1 byte null terminator)?
+    uint8_t identifier[5];
     uint8_t thumbnail_format; // 10: jpeg format, 11: 1 bpp palettized format, 13: 3 bpp rgb format
     // NOTE: this doesnt include thumbnail data as it is of variable size, it must be read seperately
 } __attribute__((packed)) JFXX_APP0; // JFIF extension APP0 marker segment
 
+typedef struct {
+    uint16_t marker;
+    uint16_t length;
+    uint8_t info; // 0: 8 bit, 1: 16 bit | 0-3 id
+    uint8_t table[64]; // TODO: 16 bit data type for 16 bit info (1) (data)
+} __attribute__((packed)) Quantization_Table;
 /* general */
-bool validate_JPEG(uint16_t signature);
+void endian16_JPEG(uint16_t *value);    // convert from little to big endian
+uint16_t load_signature(FILE *img);     // reads the first two bytes
+bool validate_JPEG(uint16_t signature); // verifies that a signature is an SOI marker which indicates a JPEG image
 /* segment */
-JFIF_APP0 load_JFIF_JPEG(FILE *img);
+void scanfor_JPEG(uint16_t marker, void (*callback)(int, uint16_t, FILE *), FILE *img); // callback at every 2 bytes
+JFIF_APP0 load_APP0_JPEG(FILE *img);    // reads the APP0 segment
+Quantization_Table* load_DQT_JPEG(FILE *img); // reads DQT segment
+uint8_t get_QT_amount_JPEG(void);
 
 #endif // __JPEG_H_

@@ -188,4 +188,4 @@ void *load_pixels_BMP(BITMAPV5HEADER info, FILE *img, uint32_t OffBits); // read
 void save_pixel_BMP(uint32_t dest, Colour_BMP source, uint32_t count, BITMAPV5HEADER info, uint32_t OffBits, FILE *img); // writes pixels
 
 // #pragma pack(pop)
-#endif // __FORMATS_H_
+#endif // __BITMAP_H_
