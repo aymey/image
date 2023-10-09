@@ -153,20 +153,43 @@ typedef struct {
     // NOTE: this doesnt include thumbnail data as it is of variable size, it must be read seperately
 } __attribute__((packed)) JFXX_APP0; // JFIF extension APP0 marker segment
 
+extern const uint8_t zigzag_map[64];
+
 typedef struct {
     uint16_t marker;
     uint16_t length;
     uint8_t info; // 0: 8 bit, 1: 16 bit | 0-3 id
     uint8_t table[64]; // TODO: 16 bit data type for 16 bit info (1) (data)
 } __attribute__((packed)) Quantization_Table;
+
+struct __attribute__((packed)) component_info {
+    uint8_t id;
+    uint8_t sampling_factor; // horizontal is upper nibble, vertical is lower
+    uint8_t table; // quantization table number
+};
+
+typedef struct {
+    uint16_t marker;
+    uint16_t length;
+    const uint8_t precision; // bpc (8)
+    uint16_t width;
+    uint16_t height;
+    uint8_t components; // number of colour channels (1: greyscale, 3: YCbCr, 4: CMYK)
+    struct component_info component_info[4];
+} __attribute__((packed)) Frame;
+
 /* general */
 void endian16_JPEG(uint16_t *value);    // convert from little to big endian
 uint16_t load_signature(FILE *img);     // reads the first two bytes
 bool validate_JPEG(uint16_t signature); // verifies that a signature is an SOI marker which indicates a JPEG image
-/* segment */
 void scanfor_JPEG(uint16_t marker, void (*callback)(int, uint16_t, FILE *), FILE *img); // callback at every 2 bytes
+/* segment */
+/* APP */
 JFIF_APP0 load_APP0_JPEG(FILE *img);    // reads the APP0 segment
+/* quantization table */
 Quantization_Table* load_DQT_JPEG(FILE *img); // reads DQT segment
-uint8_t get_QT_amount_JPEG(void);
+uint8_t get_QT_amount_JPEG(void); // gets the amount of quantization tables in file
+/* frame */
+Frame load_SOF0_JPEG(FILE *img);
 
 #endif // __JPEG_H_

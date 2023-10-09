@@ -1,9 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -ggdb
 TARGET = image
 
-BITMAP_PATH = ./bitmap
-JPEG_PATH = ./jpeg
+BITMAP_PATH = bitmap
+JPEG_PATH = jpeg
 
 all: bitmap jpeg
 image: all

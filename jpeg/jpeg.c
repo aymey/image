@@ -48,6 +48,17 @@ void load_thumbnail_data(FILE *img) {
 
 }
 
+const uint8_t zigzag_map[64] = {
+     0,  1,  8, 16,  9,  2,  3, 10,
+    17, 24, 32, 25, 18, 11,  4,  5,
+    12, 19, 26, 33, 40, 48, 41, 34,
+    27, 20, 13,  6,  7, 14, 21, 28,
+    35, 42, 49, 56, 57, 50, 43, 36,
+    29, 22, 15, 23, 30, 37, 44, 51,
+    58, 59, 52, 45, 38, 31, 39, 46,
+    53, 60, 61, 54, 47, 55, 62, 63
+};
+
 uint8_t current_table = 0;
 Quantization_Table* load_DQT_JPEG(FILE *img) {
     fseek(img, -MARKER_SIZE, SEEK_CUR); // to include marker
@@ -55,6 +66,7 @@ Quantization_Table* load_DQT_JPEG(FILE *img) {
     fread(&table, MARKER_SIZE, 2, img);
     endian16_JPEG(&table[current_table].marker);
     endian16_JPEG(&table[current_table].length);
+
     int16_t length = table[current_table].length - MARKER_SIZE;
     while(length > 0 && current_table < 4) {
         table[current_table].marker = table[0].marker;
@@ -63,14 +75,15 @@ Quantization_Table* load_DQT_JPEG(FILE *img) {
         fread(&table[current_table].info, 1, 1, img);
         length--;
         if(table[current_table].info >> 4) { // 16 bit
-            fread(&table[current_table].table, 128, 1, img);
+            fread(&table[current_table].table, 2, 64, img);
             for(uint8_t i = 0; i < 64; i++)
                 endian16_JPEG(&table[current_table].table[i]);
             length -= 128;
         } else {  // 8 bit
-            fread(&table[current_table].table, 64, 1, img);
+            fread(&table[current_table].table, 1, 64, img);
             length -= 64;
         }
+        // TODO: read with zig zag map to array
         current_table++;
     }
 
@@ -78,5 +91,36 @@ Quantization_Table* load_DQT_JPEG(FILE *img) {
 }
 
 uint8_t get_QT_amount_JPEG(void) {
+    // maybe just extern current_table instead of a getter?
     return current_table;
+}
+
+Frame load_SOF0_JPEG(FILE *img) {
+    fseek(img, -MARKER_SIZE, SEEK_CUR); // to include marker
+    Frame segment;
+    fread(&segment, sizeof(Frame)-sizeof(struct component_info[4]), 1, img);
+    if(segment.precision != 8) {
+        printf("ignoring invalid precision value: expected 8 found %d\n", segment.precision);
+        // return segment;
+    }
+    endian16_JPEG(&segment.marker);
+    endian16_JPEG(&segment.length);
+    endian16_JPEG(&segment.width);
+    endian16_JPEG(&segment.height);
+    // if(!segment.width || !segment.height) {}
+    // TODO: support all components
+    for(uint8_t i = 0; i < segment.components; i++) {
+        uint8_t component = 0;
+        fread(&component, 1, 1, img);
+        component--;
+        segment.component_info[component].id = component+1;
+        fread(&segment.component_info[component].sampling_factor, 1, 1, img);
+        fread(&segment.component_info[component].table, 1, 1, img);
+        if(segment.component_info[component].table > 3)
+            printf("invalid quantization table id %d\n", segment.component_info[component].table);
+    }
+
+    if(segment.length - (sizeof(Frame)-sizeof(struct component_info[4]) - MARKER_SIZE) - segment.components*sizeof(struct component_info) == 0)
+        printf("invalid SOF segment\n");
+    return segment;
 }
