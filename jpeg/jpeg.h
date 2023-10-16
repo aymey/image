@@ -178,12 +178,27 @@ typedef struct {
     struct component_info component_info[4];
 } __attribute__((packed)) Frame;
 
+typedef struct {
+    uint16_t marker;
+    uint16_t length;
+    uint16_t interval;
+} __attribute__((packed)) Define_Restart_Interval;
+
+typedef struct {
+    uint16_t marker;
+    uint16_t length;
+    uint8_t info; // upper nibble (0: DC, 1: AC), lower nibble (0-3 table id)
+    uint8_t codes[16]; // number of symbols of length equal to each byte number
+    uint8_t symbols[162];
+} __attribute__((packed)) Huffman_Table;
+
+// TODO: have header struct for qt amount, ac/dc huffman table, etc instead of goofy getters
+
 /* general */
 void endian16_JPEG(uint16_t *value);    // convert from little to big endian
 uint16_t load_signature(FILE *img);     // reads the first two bytes
 bool validate_JPEG(uint16_t signature); // verifies that a signature is an SOI marker which indicates a JPEG image
-void scanfor_JPEG(uint16_t marker, void (*callback)(int, uint16_t, FILE *), FILE *img); // callback at every 2 bytes
-/* segment */
+void scanfor_JPEG(uint16_t marker, void (*callback)(uint16_t, FILE *), FILE *img); // callback at every 2 bytes
 /* APP */
 JFIF_APP0 load_APP0_JPEG(FILE *img);    // reads the APP0 segment
 /* quantization table */
@@ -191,5 +206,9 @@ Quantization_Table* load_DQT_JPEG(FILE *img); // reads DQT segment
 uint8_t get_QT_amount_JPEG(void); // gets the amount of quantization tables in file
 /* frame */
 Frame load_SOF0_JPEG(FILE *img);
+/* restart interval */
+Define_Restart_Interval load_DRI_JPEG(FILE *img);
+/* huffman table */
+Huffman_Table load_DHT_JPEG(FILE *img);
 
 #endif // __JPEG_H_

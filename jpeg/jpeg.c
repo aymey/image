@@ -17,13 +17,13 @@ bool validate_JPEG(uint16_t signature) {
     return signature == SOI;
 }
 
-void scanfor_JPEG(uint16_t marker, void (*callback)(int, uint16_t, FILE *), FILE *img) {
+void scanfor_JPEG(uint16_t marker, void (*callback)(uint16_t, FILE *), FILE *img) {
     fseek(img, 0, SEEK_SET);
     bool file_status = true; // has not reached EOI
     uint16_t segment = NUL;
-    for(int offset = 0; file_status; offset += MARKER_SIZE) {
+    while(file_status) {
         fread(&segment, MARKER_SIZE, 1, img);
-        callback(offset, segment, img);
+        callback(segment, img);
         if(segment == EOI || segment == 0xFFD9)
             file_status = false;
     }
@@ -108,11 +108,15 @@ Frame load_SOF0_JPEG(FILE *img) {
     endian16_JPEG(&segment.width);
     endian16_JPEG(&segment.height);
     // if(!segment.width || !segment.height) {}
-    // TODO: support all components
+    // TODO: support all number of components
+    bool zero = false;
     for(uint8_t i = 0; i < segment.components; i++) {
         uint8_t component = 0;
         fread(&component, 1, 1, img);
-        component--;
+        if(!component)
+            zero = true;
+        if(!zero)
+            component--;
         segment.component_info[component].id = component+1;
         fread(&segment.component_info[component].sampling_factor, 1, 1, img);
         fread(&segment.component_info[component].table, 1, 1, img);
@@ -120,7 +124,40 @@ Frame load_SOF0_JPEG(FILE *img) {
             printf("invalid quantization table id %d\n", segment.component_info[component].table);
     }
 
-    if(segment.length - (sizeof(Frame)-sizeof(struct component_info[4]) - MARKER_SIZE) - segment.components*sizeof(struct component_info) == 0)
-        printf("invalid SOF segment\n");
+    if(segment.length - (sizeof(Frame)-sizeof(struct component_info[4]) - MARKER_SIZE) - segment.components*sizeof(struct component_info[4]) == 0)
+        printf("invalid SOF segment (length)\n");
     return segment;
+}
+
+Define_Restart_Interval load_DRI_JPEG(FILE *img) {
+    fseek(img, -MARKER_SIZE, SEEK_CUR);
+    Define_Restart_Interval segment;
+    fread(&segment, sizeof(segment), 1, img);
+    endian16_JPEG(&segment.marker);
+    endian16_JPEG(&segment.length);
+    endian16_JPEG(&segment.interval);
+    if(segment.length - (sizeof(segment) - MARKER_SIZE) != 0)
+        printf("invalid DRI segment (length)\n");
+    return segment;
+}
+
+Huffman_Table load_DHT_JPEG(FILE *img) {
+    fseek(img, -MARKER_SIZE, SEEK_CUR);
+    Huffman_Table table;
+    fread(&table, MARKER_SIZE, 2, img);
+    endian16_JPEG(&table.marker);
+    endian16_JPEG(&table.length);
+    int16_t length = table.length; // TODO: potential overflow
+    length -= MARKER_SIZE;
+    while(length > 0) {
+        fread(&table.info, 1, 1, img);
+        length--;
+        // if(table.info >> 4) // AC
+            // Huffm
+        fread(&table.codes, 1, 16, img);
+        length -= 16;
+
+    }
+
+    return table;
 }

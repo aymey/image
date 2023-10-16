@@ -2,12 +2,13 @@
 
 #include "jpeg.h"
 
-void callback(int offset, uint16_t segment, FILE *img) {
+void callback(uint16_t segment, FILE *img) {
     if(IS_MARKER_APP(segment)) {
-        uint16_t length = 0;
-        fread(&length, MARKER_SIZE, 1, img);
-        endian16_JPEG(&length);
-        fseek(img, length, SEEK_CUR);
+        // printf("%X\n", segment);
+        // uint16_t length = 0;
+        // fread(&length, MARKER_SIZE, 1, img);
+        // endian16_JPEG(&length);
+        // fseek(img, length, SEEK_CUR);
     } else if(segment == DQT) {
         Quantization_Table *table = load_DQT_JPEG(img);
         printf("=================DQT================");
@@ -34,6 +35,11 @@ void callback(int offset, uint16_t segment, FILE *img) {
             printf("sampling_factor %d: %d\n", i, frame.component_info[i].sampling_factor);
             printf("table %d: %d\n", i, frame.component_info[i].table);
         }
+    } else if(segment == DRI) {
+        printf("\n================DRI=================\n");
+        Define_Restart_Interval DRI_seg = load_DRI_JPEG(img);
+        printf("length: %d\n", DRI_seg.length);
+        printf("interval: %d\n", DRI_seg.interval);
     }
 }
 
